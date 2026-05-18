@@ -61,17 +61,20 @@ export default function Navbar() {
           })}
         </nav>
 
-        {/* Mobile Hamburger Button */}
-        <button
-          type="button"
-          onClick={toggleMenu}
-          className={`hamburger-btn ${isMenuOpen ? "open" : ""}`}
-          aria-label="Toggle Navigation Menu"
-        >
-          <span className="hamburger-line"></span>
-          <span className="hamburger-line"></span>
-          <span className="hamburger-line"></span>
-        </button>
+        {/* Mobile Actions */}
+        <div className="mobile-actions-wrapper">
+          {/* Mobile Hamburger Button */}
+          <button
+            type="button"
+            onClick={toggleMenu}
+            className={`hamburger-btn ${isMenuOpen ? "open" : ""}`}
+            aria-label="Toggle Navigation Menu"
+          >
+            <span className="hamburger-line"></span>
+            <span className="hamburger-line"></span>
+            <span className="hamburger-line"></span>
+          </button>
+        </div>
       </header>
 
       {/* Mobile Glassmorphic Navigation Drawer */}

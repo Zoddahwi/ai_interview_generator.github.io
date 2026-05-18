@@ -1,6 +1,6 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY || process.env.GEMINI_API_KEY || "";
+const apiKey = process.env.GEMINI_API_KEY || "";
 const genAI = new GoogleGenerativeAI(apiKey);
 
 /**
@@ -11,7 +11,7 @@ const genAI = new GoogleGenerativeAI(apiKey);
  */
 export async function generateText(prompt: string): Promise<string> {
   if (!apiKey) {
-    throw new Error("Gemini API Key is not configured. Please define GEMINI_API_KEY or NEXT_PUBLIC_GEMINI_API_KEY in your environment variables.");
+    throw new Error("Google Gemini API Key is not configured. Please define GEMINI_API_KEY in your server environment variables.");
   }
   
   const model = genAI.getGenerativeModel({
