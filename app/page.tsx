@@ -223,12 +223,26 @@ export default function Home() {
 
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data?.error || "Failed to generate questions.");
+        // Provide more helpful error messages based on HTTP status
+        let errorMessage = data?.error || "Failed to generate questions.";
+        
+        if (response.status === 503 || response.status === 504) {
+          errorMessage = `${errorMessage} The service should recover shortly—try again in a moment.`;
+        } else if (response.status === 429) {
+          errorMessage = `${errorMessage} You're being rate-limited. Please wait before retrying.`;
+        } else if (response.status === 400) {
+          errorMessage = `${errorMessage} Please check your input parameters.`;
+        }
+        
+        throw new Error(errorMessage);
       }
 
       setQuestions(data.questions);
+      showToast("✅ Questions generated successfully!");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong.");
+      const errorMsg = err instanceof Error ? err.message : "Something went wrong. Please try again.";
+      setError(errorMsg);
+      showToast(`❌ ${errorMsg}`);
     } finally {
       setLoading(false);
     }

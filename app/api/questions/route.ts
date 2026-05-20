@@ -44,12 +44,37 @@ Remember: You MUST output exactly ${count} distinct blocks separated by '---'.`;
     });
   } catch (error) {
     console.error("Error in /api/questions:", error);
+    
+    const errorMessage = error instanceof Error ? error.message : "Internal Server Error";
+    const statusCode = (error as any)?.statusCode || 500;
+    
+    let userFriendlyError = errorMessage;
+    let httpStatus = statusCode;
+    
+    // Map internal errors to user-friendly messages and appropriate HTTP status codes
+    if (statusCode === 401) {
+      userFriendlyError = "Server configuration error: API key is invalid or missing.";
+      httpStatus = 500; // Return 500 to client, but log the auth issue
+    } else if (statusCode === 400) {
+      userFriendlyError = "Invalid request parameters. Please check your inputs.";
+      httpStatus = 400;
+    } else if (statusCode === 503) {
+      userFriendlyError = "The AI service is currently unavailable. Please try again in a few moments.";
+      httpStatus = 503;
+    } else if (statusCode === 429) {
+      userFriendlyError = "Too many requests. Please wait a minute before trying again.";
+      httpStatus = 429;
+    } else if (statusCode === 504) {
+      userFriendlyError = "The AI service is temporarily unresponsive. Please try again shortly.";
+      httpStatus = 504;
+    }
+    
     return NextResponse.json(
       {
         success: false,
-        error: error instanceof Error ? error.message : "Internal Server Error",
+        error: userFriendlyError,
       },
-      { status: 500 }
+      { status: httpStatus }
     );
   }
 }
