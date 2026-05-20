@@ -30,7 +30,7 @@ export default function RootLayout({
               <a href="#">Terms of Service</a>
             </div>
             <div className="footer-copyright">
-              © {new Date().getFullYear()} InterviewAI. Powered by Antigravity Design.
+              © {new Date().getFullYear()} InterviewAI
             </div>
           </div>
         </footer>
